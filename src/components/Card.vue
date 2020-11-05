@@ -9,18 +9,18 @@
             <v-card-text>
                 <span>{{currentTimeFormatted}}</span> / <span id="duration">{{durationFormatted}}</span>
                 <v-slider :max="duration - 1 >= 0 ? duration -1 : 1" min="0" :value="currentTime ? currentTime : 0" @input="changeTime($event)"/>
-  <!--              <v-btn @click="back" elevation="2" fab>
+                <v-btn @click="back" elevation="2" fab>
                     <v-icon>mdi-skip-previous</v-icon>
-                </v-btn>-->
+                </v-btn>
                 <v-btn @click="play" elevation="2" fab>
                     <v-icon>mdi-play</v-icon>
                 </v-btn>
                 <v-btn @click="pause" elevation="2" fab>
                     <v-icon>mdi-pause</v-icon>
                 </v-btn>
- <!--               <v-btn @click="next" elevation="2" fab>
+                <v-btn @click="next" elevation="2" fab>
                     <v-icon>mdi-skip-next</v-icon>
-                </v-btn>-->
+                </v-btn>
 
 
             </v-card-text>
@@ -30,7 +30,7 @@
         <v-container class="playlist">
             <ul>
                 <div v-for="song in songs" :key="song.urlSong">
-                    <v-btn  @click="startSong(song.urlSong)">
+                    <v-btn  @click="startSong(song)">
                         {{song.title}}
                     </v-btn>
                 </div>
@@ -63,12 +63,18 @@
                 duration: 0,
                 intervalTimer: null,
                 songs: [],
+                actualSong: null,
             }
         },
         methods: {
             startSong(song){
-                this.myAudio.pause();
-                this.myAudio = new Audio(song);
+
+                if(this.myAudio) {
+                    clearInterval(this.intervalTimer);
+                    this.pause()
+                }
+                this.actualSong = this.songs.indexOf(song);
+                this.myAudio = new Audio(song.urlSong);
                 this.myAudio.addEventListener("canplaythrough", () => {
                     this.duration = this.myAudio.duration
                 });
@@ -81,22 +87,28 @@
             pause() {
                 this.myAudio.pause();
             },
-/*            next(){
-                this.myAudio = new Audio()
-            },*/
-/*            back(){
-
-            },*/
+            next(){
+                const nextSong = this.songs[this.actualSong+1];
+                if(!nextSong) {
+                    return
+                }
+                this.startSong(nextSong)
+            },
+            back(){
+                const prevSong = this.songs[this.actualSong-1];
+                if(!prevSong) {
+                    return
+                }
+                this.startSong(prevSong)
+            },
 
             changeTime(e) {
-                console.log(e);
-                if(e < 0) {
+                console.log(e, this.myAudio.currentTime);
+                if(e < 0 || e === Math.round(this.myAudio.currentTime)) {
                     return
                 }
                 clearInterval(this.intervalTimer);
-/*
                 this.myAudio.currentTime = e;
-*/
                 this.intervalTimer = this.calculIntervalTime()
             },
             calculIntervalTime(){
