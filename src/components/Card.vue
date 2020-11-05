@@ -8,19 +8,20 @@
             ></v-img>
             <v-card-text>
                 <span>{{currentTimeFormatted}}</span> / <span id="duration">{{durationFormatted}}</span>
-                <v-slider :max="duration - 1" min="0" :value="currentTime" @input="changeTime($event)"/>
+                <v-slider :max="duration - 1 >= 0 ? duration -1 : 1" min="0" :value="currentTime ? currentTime : 0" @input="changeTime($event)"/>
+  <!--              <v-btn @click="back" elevation="2" fab>
+                    <v-icon>mdi-skip-previous</v-icon>
+                </v-btn>-->
                 <v-btn @click="play" elevation="2" fab>
                     <v-icon>mdi-play</v-icon>
                 </v-btn>
                 <v-btn @click="pause" elevation="2" fab>
                     <v-icon>mdi-pause</v-icon>
                 </v-btn>
-                <v-btn @click="next" elevation="2" fab>
-                    <v-icon>mdi-next</v-icon>
-                </v-btn>
-                <v-btn @click="back" elevation="2" fab>
-                    <v-icon>mdi-pause</v-icon>
-                </v-btn>
+ <!--               <v-btn @click="next" elevation="2" fab>
+                    <v-icon>mdi-skip-next</v-icon>
+                </v-btn>-->
+
 
             </v-card-text>
         </v-container>
@@ -29,7 +30,7 @@
         <v-container class="playlist">
             <ul>
                 <div v-for="song in songs" :key="song.urlSong">
-                    <v-btn  @click="startSong(song)">
+                    <v-btn  @click="startSong(song.urlSong)">
                         {{song.title}}
                     </v-btn>
                 </div>
@@ -57,7 +58,7 @@
         },
         data() {
             return {
-                myAudio: new Audio(),
+                myAudio: null,
                 currentTime: 0,
                 duration: 0,
                 intervalTimer: null,
@@ -65,13 +66,13 @@
             }
         },
         methods: {
-
             startSong(song){
-                this.createAudio(song.urlSong);
-                this.intervalTimer = this.calculIntervalTime();
+                this.myAudio.pause();
+                this.myAudio = new Audio(song);
                 this.myAudio.addEventListener("canplaythrough", () => {
                     this.duration = this.myAudio.duration
                 });
+                this.intervalTimer = this.calculIntervalTime();
                 this.play()
             },
             play() {
@@ -80,11 +81,22 @@
             pause() {
                 this.myAudio.pause();
             },
-            next(){},
-            back(){},
+/*            next(){
+                this.myAudio = new Audio()
+            },*/
+/*            back(){
+
+            },*/
+
             changeTime(e) {
+                console.log(e);
+                if(e < 0) {
+                    return
+                }
                 clearInterval(this.intervalTimer);
+/*
                 this.myAudio.currentTime = e;
+*/
                 this.intervalTimer = this.calculIntervalTime()
             },
             calculIntervalTime(){
@@ -96,9 +108,6 @@
                 let jsonfile = json.playlist;
                 jsonfile.map(data => this.songs.push(data));
             },
-            createAudio(song){
-                this.myAudio = new Audio(song)
-            }
         },
         computed: {
             currentTimeFormatted() {
