@@ -1,5 +1,4 @@
 <template>
-
   <div id="audioContainer">
     <div class="music">
       <img class="img" src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
@@ -31,18 +30,29 @@
         </div>
       </ul>
     </div>
+    <div>
+      <a v-on:click.prevent="" v-on:mouseenter="showVolume = true" title="Volume">
+        <svg width="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+          <path fill="currentColor" d="M19,13.805C19,14.462,18.462,15,17.805,15H1.533c-0.88,0-0.982-0.371-0.229-0.822l16.323-9.055C18.382,4.67,19,5.019,19,5.9V13.805z"/>
+        </svg>
+        <input v-model.lazy.number="volume" v-show="showVolume" type="range" min="0" max="100"/>
+      </a>
+    </div>
+<!--    <knob-control :min="0" :max="100" :responsive="true" :animated="true" v-model="someValue">test</knob-control>-->
   </div>
-
 </template>
 
 <script>
 
 import moment from "moment"
 import json from "../assets/db.json"
+// import KnobControl from 'vue-knob-control'
 
 export default {
   name: "Card",
-  props: {},
+  props: {
+    // KnobControl
+  },
   created() {
 
     this.fetchSongs();
@@ -55,11 +65,12 @@ export default {
       intervalTimer: null,
       songs: [],
       actualSong: null,
+      showVolume: false,
+      volume: 100
     }
   },
   methods: {
     startSong(song) {
-
       if (this.myAudio) {
         clearInterval(this.intervalTimer);
         this.pause()
@@ -122,7 +133,12 @@ export default {
     }
 
   },
-  watch: {}
+  watch: {
+    volumes(){
+      this.showVolume = false;
+      this.myAudio.volume = this.volume / 100;
+    }
+  }
 }
 
 </script>
