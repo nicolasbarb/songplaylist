@@ -1,29 +1,34 @@
 {
   "playlist": [
-  {
-    "title":"Bad kind of mongrel",
-    "urlSong": "http://memorykeeper.fr/musiques/songs/bad-kind-of-mongrel.mp3",
-    "img": "http://memorykeeper.fr/musiques/images/bad-kind-of-mongrel.jpg"
-  },
-  {
-     "title":"My summer love",
-     "urlSong": "http://memorykeeper.fr/musiques/songs/my-summer-love.mp3",
-     "img": "http://memorykeeper.fr/musiques/images/my-summer-love.jpg"
-  },
-  {
-     "title":"Roundabout",
-     "urlSong": "http://memorykeeper.fr/musiques/songs/roundabout.mp3",
-     "img": "http://memorykeeper.fr/musiques/images/roundabout.jpg"
-  },
-  {
-     "title":"Hungry",
-     "urlSong": "http://memorykeeper.fr/musiques/songs/hungry.mp3",
-     "img": "http://memorykeeper.fr/musiques/images/hungry.jpg"
-  },
-  {
-     "title":"Disco",
-     "urlSong": "http://memorykeeper.fr/musiques/songs/disco-kid.mp3",
-     "img": "http://memorykeeper.fr/musiques/images/disco-kid.jpg"
-  }
-]
+    {
+      "title": "Thunderstruck",
+      "urlSong": "./musique/acdc_thunderstruck.mp3",
+      "img": "./image/thunderstruck.jpg",
+      "artiste": "ACDC"
+    },
+    {
+      "title": "I see Red",
+      "urlSong": "./musique/ELAO_i_see_red.mp3",
+      "img": "./image/iseered.jpg",
+      "artiste": "Everybody Loves an Outlaw"
+    },
+    {
+      "title": "Le Chemin",
+      "urlSong": "./musique/yuzmv_chemin.mp3",
+      "img": "./image/lechemin.jpg",
+      "artiste": "Yuzmv"
+    },
+    {
+      "title": "Wow Wow Wow",
+      "urlSong": "./musique/joyca_wow.mp3",
+      "img": "./image/wowwowwow.jpg",
+      "artiste": "Joyca"
+    },
+    {
+      "title": "Confinés",
+      "urlSong": "./musique/joyca_confines.mp3",
+      "img": "./image/confine.jpg",
+      "artiste": "Joyca"
+    }
+  ]
 }

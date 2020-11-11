@@ -1,12 +1,19 @@
 <template>
-
   <div id="audioContainer">
     <div class="music">
-      <img class="img" src="https://cdn.vuetifyjs.com/images/cards/cooking.png">
+      <img
+        class="img"
+        src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+      />
       <v-card-text>
-        <span>{{ currentTimeFormatted }}</span> / <span id="duration">{{ durationFormatted }}</span>
-        <v-slider :max="duration - 1 >= 0 ? duration -1 : 1" min="0" :value="currentTime ? currentTime : 0"
-                  @input="changeTime($event)"/>
+        <span>{{ currentTimeFormatted }}</span> /
+        <span id="duration">{{ durationFormatted }}</span>
+        <v-slider
+          :max="duration - 1 >= 0 ? duration - 1 : 1"
+          min="0"
+          :value="currentTime ? currentTime : 0"
+          @input="changeTime($event)"
+        />
         <v-btn @click="back" elevation="2" fab>
           <v-icon>mdi-skip-previous</v-icon>
         </v-btn>
@@ -21,30 +28,22 @@
         </v-btn>
       </v-card-text>
     </div>
-
     <div class="playlist">
-      <ul>
-        <div v-for="song in songs" :key="song.urlSong">
-          <v-btn class="btn" @click="startSong(song)">
-            {{ song.title }}
-          </v-btn>
-        </div>
-      </ul>
+      <playlist :songs="songs" v-on:startsong="startSong($event)"></playlist>
     </div>
   </div>
-
 </template>
 
 <script>
-
-import moment from "moment"
-import json from "../assets/db.json"
+import moment from "moment";
+import json from "../assets/db.json";
+import Playlist from "./playlist";
 
 export default {
   name: "Card",
+  components: { Playlist },
   props: {},
   created() {
-
     this.fetchSongs();
   },
   data() {
@@ -54,23 +53,22 @@ export default {
       duration: 0,
       intervalTimer: null,
       songs: [],
-      actualSong: null,
-    }
+      actualSong: null
+    };
   },
   methods: {
     startSong(song) {
-
       if (this.myAudio) {
         clearInterval(this.intervalTimer);
-        this.pause()
+        this.pause();
       }
       this.actualSong = this.songs.indexOf(song);
       this.myAudio = new Audio(song.urlSong);
       this.myAudio.addEventListener("canplaythrough", () => {
-        this.duration = this.myAudio.duration
+        this.duration = this.myAudio.duration;
       });
       this.intervalTimer = this.calculIntervalTime();
-      this.play()
+      this.play();
     },
     play() {
       this.myAudio.play();
@@ -81,26 +79,25 @@ export default {
     next() {
       const nextSong = this.songs[this.actualSong + 1];
       if (!nextSong) {
-        return
+        return;
       }
-      this.startSong(nextSong)
+      this.startSong(nextSong);
     },
     back() {
       const prevSong = this.songs[this.actualSong - 1];
       if (!prevSong) {
-        return
+        return;
       }
-      this.startSong(prevSong)
+      this.startSong(prevSong);
     },
 
     changeTime(e) {
-      console.log(e, this.myAudio.currentTime);
       if (e < 0 || e === Math.round(this.myAudio.currentTime)) {
-        return
+        return;
       }
       clearInterval(this.intervalTimer);
       this.myAudio.currentTime = e;
-      this.intervalTimer = this.calculIntervalTime()
+      this.intervalTimer = this.calculIntervalTime();
     },
     calculIntervalTime() {
       return setInterval(() => {
@@ -110,21 +107,19 @@ export default {
     fetchSongs() {
       let jsonfile = json.playlist;
       jsonfile.map(data => this.songs.push(data));
-    },
+    }
   },
   computed: {
     currentTimeFormatted() {
-      return moment(this.currentTime * 1000).format("mm:ss")
+      return moment(this.currentTime * 1000).format("mm:ss");
     },
 
     durationFormatted() {
-      return moment(this.duration * 1000).format('mm:ss');
+      return moment(this.duration * 1000).format("mm:ss");
     }
-
   },
   watch: {}
-}
-
+};
 </script>
 
 <style scoped lang="scss">
@@ -139,20 +134,11 @@ export default {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    border-bottom: 1px solid rgba(0,0,0, .5);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 10px;
     .img {
       width: inherit;
     }
   }
-
-  .playlist {
-    margin: 0;
-    .btn {
-      box-shadow: none;
-      background-color: transparent;
-    }
-  }
 }
-
 </style>
