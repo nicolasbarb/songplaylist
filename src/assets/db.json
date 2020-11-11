@@ -3,31 +3,31 @@
     {
       "title": "Thunderstruck",
       "urlSong": "./musique/acdc_thunderstruck.mp3",
-      "img": "./image/thunderstruck.jpg",
+      "img": "./songsImages/thunderstruck.jpg",
       "artiste": "ACDC"
     },
     {
       "title": "I see Red",
       "urlSong": "./musique/ELAO_i_see_red.mp3",
-      "img": "./image/iseered.jpg",
+      "img": "./songsImages/iseered.jpg",
       "artiste": "Everybody Loves an Outlaw"
     },
     {
       "title": "Le Chemin",
       "urlSong": "./musique/yuzmv_chemin.mp3",
-      "img": "./image/lechemin.jpg",
+      "img": "./songsImages/lechemin.jpg",
       "artiste": "Yuzmv"
     },
     {
       "title": "Wow Wow Wow",
       "urlSong": "./musique/joyca_wow.mp3",
-      "img": "./image/wowwowwow.jpg",
+      "img": "./songsImages/wowwowwow.jpg",
       "artiste": "Joyca"
     },
     {
       "title": "Confinés",
       "urlSong": "./musique/joyca_confines.mp3",
-      "img": "./image/confine.jpg",
+      "img": "./songsImages/confine.jpg",
       "artiste": "Joyca"
     }
   ]

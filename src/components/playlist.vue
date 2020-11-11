@@ -1,7 +1,7 @@
 <template>
 
         <ul>
-            <div v-for="song in songs" :key="song.urlSong">
+            <div v-for="song in this.$store.state.songs" :key="song.urlSong">
                 <v-btn class="btn" @click="startSong(song)">
                     {{ song.title }}
                 </v-btn>
@@ -10,16 +10,26 @@
 </template>
 
 <script>
+
+    import json from "../assets/db.json";
+    import { bus } from '../main'
+
+
     export default {
         name: "playlist",
-        props: {
-            songs: {
-                required: true
-            }
+
+        created() {
+            this.fetchSongs();
         },
         methods: {
+
+            fetchSongs() {
+                let jsonfile = json.playlist;
+                jsonfile.map(data => this.$store.state.songs.push(data));
+            },
+
             startSong(song) {
-                this.$emit("startsong", song)
+                bus.$emit("startsong", song);
             }
         }
     }
