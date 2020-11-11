@@ -2,17 +2,17 @@
   <div id="audioContainer">
     <div class="music">
       <img
-        class="img"
-        src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+          class="img"
+          src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
       />
       <v-card-text>
         <span>{{ currentTimeFormatted }}</span> /
         <span id="duration">{{ durationFormatted }}</span>
         <v-slider
-          :max="duration - 1 >= 0 ? duration - 1 : 1"
-          min="0"
-          :value="currentTime ? currentTime : 0"
-          @input="changeTime($event)"
+            :max="duration - 1 >= 0 ? duration - 1 : 1"
+            min="0"
+            :value="currentTime ? currentTime : 0"
+            @input="changeTime($event)"
         />
         <v-btn @click="back" elevation="2" fab>
           <v-icon>mdi-skip-previous</v-icon>
@@ -31,15 +31,7 @@
     <div class="playlist">
       <playlist :songs="songs" v-on:startsong="startSong($event)"></playlist>
     </div>
-    <div>
-      <a v-on:click.prevent="" v-on:mouseenter="showVolume = true" title="Volume">
-        <svg width="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-          <path fill="currentColor" d="M19,13.805C19,14.462,18.462,15,17.805,15H1.533c-0.88,0-0.982-0.371-0.229-0.822l16.323-9.055C18.382,4.67,19,5.019,19,5.9V13.805z"/>
-        </svg>
-        <input v-model.lazy.number="volume" v-show="showVolume" type="range" min="0" max="100"/>
-      </a>
-    </div>
-<!--    <knob-control :min="0" :max="100" :responsive="true" :animated="true" v-model="someValue">test</knob-control>-->
+    <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step="0.1">{{ this.volume * 100 + '%' }}</v-slider>
   </div>
 </template>
 
@@ -50,11 +42,9 @@ import Playlist from "./playlist";
 
 export default {
   name: "Card",
-  components: { Playlist },
+  components: {Playlist},
   props: {},
-  created() {
-    this.fetchSongs();
-  },
+
   data() {
     return {
       myAudio: null,
@@ -63,13 +53,14 @@ export default {
       intervalTimer: null,
       songs: [],
       actualSong: null,
-      showVolume: false,
-      volume: 100
+      volume: .5
     }
+  },
+  created() {
+    this.fetchSongs();
   },
   methods: {
     startSong(song) {
-
       if (this.myAudio) {
         clearInterval(this.intervalTimer);
         this.pause();
@@ -102,7 +93,6 @@ export default {
       }
       this.startSong(prevSong);
     },
-
     changeTime(e) {
       if (e < 0 || e === Math.round(this.myAudio.currentTime)) {
         return;
@@ -119,6 +109,17 @@ export default {
     fetchSongs() {
       let jsonfile = json.playlist;
       jsonfile.map(data => this.songs.push(data));
+    },
+    updateVolume(volume) {
+      if (this.myAudio.volume <= 0){
+        console.log("NIQUE TA MERE", volume);
+        return;
+      }
+      /*if (this.myAudio.volume === 0){
+        this.myAudio.volume = .1
+      }*/
+      console.log(this.myAudio);
+      this.myAudio.volume = volume
     }
   },
   computed: {
@@ -130,12 +131,7 @@ export default {
       return moment(this.duration * 1000).format("mm:ss");
     }
   },
-  watch: {
-    volumes(){
-      this.showVolume = false;
-      this.myAudio.volume = this.volume / 100;
-    }
-  }
+  watch: {}
 }
 
 </script>
@@ -154,6 +150,7 @@ export default {
     overflow: hidden;
     border-bottom: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 10px;
+
     .img {
       width: inherit;
     }
