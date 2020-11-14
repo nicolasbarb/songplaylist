@@ -15,7 +15,7 @@ test/
 
 ### Vuejs ###
 # Recommended template: Node.gitignore
-
+.DS_STORE
 node_modules/
 dist/
 npm-debug.log

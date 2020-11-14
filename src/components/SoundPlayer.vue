@@ -23,6 +23,7 @@
                 <v-icon>mdi-skip-next</v-icon>
             </v-btn>
         </v-card-text>
+        <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step=".1" thumb-label></v-slider>
     </div>
 </template>
 
@@ -52,7 +53,8 @@
                 duration: 0,
                 intervalTimer: null,
                 actualSong: null,
-                songs: []
+                songs: [],
+                volume: .5
             };
         },
         methods: {
@@ -104,6 +106,17 @@
                     this.currentTime = this.myAudio.currentTime;
                 }, 1000);
             },
+            updateVolume(volume) {
+      this.myAudio.volume = volume
+      if (this.myAudio.volume == 0) {
+        console.log("Volume off", volume);
+      } else if (this.myAudio.volume < 0 || this.myAudio.volume > 1) {
+        console.error("Error value volume", volume)
+      } else {
+        console.log(volume)
+      }
+      return;
+    }
 
         },
         computed: {
