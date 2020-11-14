@@ -31,8 +31,7 @@
     <div class="playlist">
       <playlist :songs="songs" v-on:startsong="startSong($event)"></playlist>
     </div>
-    <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step="0.1"></v-slider>
-    <p>{{ this.volume * 100 + '%' }}</p>
+    <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step=".1" thumb-label></v-slider>
   </div>
 </template>
 
