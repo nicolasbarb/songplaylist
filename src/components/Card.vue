@@ -31,7 +31,8 @@
     <div class="playlist">
       <playlist :songs="songs" v-on:startsong="startSong($event)"></playlist>
     </div>
-    <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step="0.1">{{ this.volume * 100 + '%' }}</v-slider>
+    <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step="0.1"></v-slider>
+    <p>{{ this.volume * 100 + '%' }}</p>
   </div>
 </template>
 
@@ -111,15 +112,15 @@ export default {
       jsonfile.map(data => this.songs.push(data));
     },
     updateVolume(volume) {
-      if (this.myAudio.volume <= 0){
-        console.log("NIQUE TA MERE", volume);
-        return;
-      }
-      /*if (this.myAudio.volume === 0){
-        this.myAudio.volume = .1
-      }*/
-      console.log(this.myAudio);
       this.myAudio.volume = volume
+      if (this.myAudio.volume == 0) {
+        console.log("Volume off", volume);
+      } else if (this.myAudio.volume < 0 || this.myAudio.volume > 1) {
+        console.error("Error value volume", volume)
+      } else {
+        console.log(volume)
+      }
+      return;
     }
   },
   computed: {
