@@ -1,21 +1,21 @@
 <template>
-  <div id="app">
+  <v-app>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/artiste">Artiste</router-link> |
       <router-link to="/card">Card</router-link>
     </div>
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 #nav {
