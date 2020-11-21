@@ -40,7 +40,6 @@ export default {
   created() {
     this.songs = this.$store.state.songs;
     bus.$on('startsong', (data) => {
-      console.log(data);
       this.startSong(data)
     })
   },
@@ -59,34 +58,40 @@ export default {
     };
   },
   methods: {
+
     startSong(song) {
       if (this.myAudio) {
         clearInterval(this.intervalTimer);
         this.pause();
       }
-      this.actualSong = song;
-      this.myAudio = new Audio(song.urlSong);
+
+      this.actualSong = this.songs[song];
+      this.myAudio = new Audio(this.actualSong.urlSong);
       this.myAudio.addEventListener("canplaythrough", () => {
         this.duration = this.myAudio.duration;
       });
       this.intervalTimer = this.calculIntervalTime();
       this.play();
     },
+
     play() {
       this.myAudio.play();
     },
+
     pause() {
       this.myAudio.pause();
     },
+
     next() {
-      const nextSong = this.songs[this.actualSong + 1];
+      const nextSong = this.songs.indexOf(this.actualSong) + 1;
       if (!nextSong) {
         return;
       }
       this.startSong(nextSong);
     },
+
     back() {
-      const prevSong = this.songs[this.actualSong - 1];
+      const prevSong = this.songs.indexOf(this.actualSong) - 1;
       if (!prevSong) {
         return;
       }

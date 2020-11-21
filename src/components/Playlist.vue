@@ -1,12 +1,14 @@
 <template>
-
+    <div>
+        <input type="text" v-model="search" placeholder="Chercher un titre.."/>
         <ul>
-            <div v-for="song in this.$store.state.songs" :key="song.urlSong">
+            <div v-for="song in filteringList" :key="song.urlSong">
                 <v-btn class="btn" @click="startSong(song)">
                     {{ song.title }}
                 </v-btn>
             </div>
         </ul>
+    </div>
 </template>
 
 <script>
@@ -21,6 +23,13 @@
         created() {
             this.fetchSongs();
         },
+
+        data () {
+            return {
+                search: '',
+                filteredList: this.$store.state.songs
+            }
+        },
         methods: {
 
             fetchSongs() {
@@ -29,7 +38,15 @@
             },
 
             startSong(song) {
-                bus.$emit("startsong", song);
+                bus.$emit("startsong", this.$store.state.songs.indexOf(song));
+            }
+        },
+
+        computed: {
+            filteringList() {
+                return this.filteredList.filter(songs => {
+                    return songs.title.toLowerCase().includes(this.search.toLowerCase())
+                })
             }
         }
     }
