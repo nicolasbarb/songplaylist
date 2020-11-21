@@ -32,19 +32,13 @@
 </template>
 
 <script>
-import {bus} from '@/main';
 import moment from "moment";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "soundPlayer",
 
   created() {
-    if(this.songs !== []){
-      this.songs = this.$store.state.songs;
-    }
-    bus.$on('startsong', (data) => {
-      this.startSong(data)
-    })
   },
 
   data() {
@@ -56,25 +50,35 @@ export default {
       actualSong: null,
       songTitle: "",
       songArtist: "",
-      songs: [],
+      inWaitingSongs: [],
+      inPreviousSongs: [],
       volume: 1,
       favoriteList: [],
       favoriteSong: null,
     };
   },
   methods: {
+    ...mapActions({
+      addSongsInPrevious: 'addSongsInPrevious'
+    }),
 
     startSong(song) {
       if (this.myAudio) {
         clearInterval(this.intervalTimer);
         this.pause();
       }
-
-      this.actualSong = this.songs[song];
+/*
+      this.addSongsInPrevious(this.actualSong);
+*/
+      this.actualSong = song;
+      console.log("ACTUAL SONG : ", this.actualSong);
       this.myAudio = new Audio(this.actualSong.urlSong);
       this.myAudio.addEventListener("canplaythrough", () => {
         this.duration = this.myAudio.duration;
       });
+      this.myAudio.onended = () => {
+        this.next()
+      };
       this.intervalTimer = this.calculIntervalTime();
       this.play();
     },
@@ -88,7 +92,9 @@ export default {
     },
 
     next() {
-      const nextSong = this.songs.indexOf(this.actualSong) + 1;
+      const nextSongIndex = this.getSongsPlaylist.indexOf(this.actualSong) + 1;
+      const nextSong = this.getSongsPlaylist[nextSongIndex];
+
       if (!nextSong) {
         return;
       }
@@ -96,7 +102,7 @@ export default {
     },
 
     back() {
-      const prevSong = this.songs.indexOf(this.actualSong) - 1;
+      const prevSong = this.getPreviousSongs.pop();
       if (!prevSong) {
         return;
       }
@@ -144,25 +150,28 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["getSongsPlaylist", "getSelectedSong", "getWaitingSongs", "getPreviousSongs"]),
+
+
     currentTimeFormatted() {
       return moment(this.currentTime * 1000).format("mm:ss");
     },
 
     durationFormatted() {
       return moment(this.duration * 1000).format("mm:ss");
-    }
+    },
   },
 
   watch: {
+
+    getSelectedSong(val){
+      this.startSong(val)
+    },
 
     actualSong(val){
       if(val.title !== "") {
         this.songTitle = val.title;
         this.songArtist = val.artiste;
-      }
-
-      val.onended = () => {
-        this.next()
       }
     }
   },
