@@ -26,6 +26,7 @@
         <v-icon>mdi-heart</v-icon>
       </v-btn>
     </v-card-text>
+    <FavoriteModal :favoriteSong="favoriteSong"/>
     <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step=".1" thumb-label></v-slider>
   </div>
 </template>
@@ -33,9 +34,11 @@
 <script>
 import {bus} from '@/main';
 import moment from "moment";
+import FavoriteModal from "./FavoriteModal";
 
 export default {
   name: "soundPlayer",
+  components: {FavoriteModal},
 
   created() {
     this.songs = this.$store.state.songs;
