@@ -2,6 +2,7 @@
   <div class="music">
     <v-img class="img" src="actualSong.img"></v-img>
     <v-card-text>
+      <p>{{this.songArtist}}</p><p>{{this.songTitle}}</p>
       <span>{{ currentTimeFormatted }}</span> /
       <span id="duration">{{ durationFormatted }}</span>
       <v-slider
@@ -32,20 +33,15 @@
 </template>
 
 <script>
-import {bus} from '@/main';
 import moment from "moment";
 import FavoriteModal from "./FavoriteModal";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "soundPlayer",
   components: {FavoriteModal},
 
   created() {
-    this.songs = this.$store.state.songs;
-    bus.$on('startsong', (data) => {
-      console.log(data);
-      this.startSong(data)
-    })
   },
 
   data() {
@@ -55,23 +51,37 @@ export default {
       duration: 0,
       intervalTimer: null,
       actualSong: null,
-      songs: [],
-      volume: .5,
+      songTitle: "",
+      songArtist: "",
+      inWaitingSongs: [],
+      inPreviousSongs: [],
+      volume: 1,
       favoriteList: [],
       favoriteSong: null,
     };
   },
   methods: {
+    ...mapActions({
+      addSongsInPrevious: 'addSongsInPrevious'
+    }),
+
     startSong(song) {
       if (this.myAudio) {
         clearInterval(this.intervalTimer);
         this.pause();
       }
+/*
+      this.addSongsInPrevious(this.actualSong);
+*/
       this.actualSong = song;
-      this.myAudio = new Audio(song.urlSong);
+      console.log("ACTUAL SONG : ", this.actualSong);
+      this.myAudio = new Audio(this.actualSong.urlSong);
       this.myAudio.addEventListener("canplaythrough", () => {
         this.duration = this.myAudio.duration;
       });
+      this.myAudio.onended = () => {
+        this.next()
+      };
       this.intervalTimer = this.calculIntervalTime();
       this.play();
     },
@@ -82,14 +92,16 @@ export default {
       this.myAudio.pause();
     },
     next() {
-      const nextSong = this.songs[this.actualSong + 1];
+      const nextSongIndex = this.getSongsPlaylist.indexOf(this.actualSong) + 1;
+      const nextSong = this.getSongsPlaylist[nextSongIndex];
+
       if (!nextSong) {
         return;
       }
       this.startSong(nextSong);
     },
     back() {
-      const prevSong = this.songs[this.actualSong - 1];
+      const prevSong = this.getPreviousSongs.pop();
       if (!prevSong) {
         return;
       }
@@ -111,14 +123,13 @@ export default {
     },
     updateVolume(volume) {
       this.myAudio.volume = volume
-      if (this.myAudio.volume == 0) {
+      if (this.myAudio.volume === 0) {
         console.log("Volume off", volume);
       } else if (this.myAudio.volume < 0 || this.myAudio.volume > 1) {
         console.error("Error value volume", volume)
       } else {
         console.log(volume)
       }
-      return;
     },
     addFavoriteSong() {
       if (this.myAudio == null) {
@@ -135,16 +146,32 @@ export default {
           console.log("song added", this.favoriteList)
         }
       }
-      return;
     },
   },
   computed: {
+    ...mapGetters(["getSongsPlaylist", "getSelectedSong", "getWaitingSongs", "getPreviousSongs"]),
+
+
     currentTimeFormatted() {
       return moment(this.currentTime * 1000).format("mm:ss");
     },
 
     durationFormatted() {
       return moment(this.duration * 1000).format("mm:ss");
+    },
+  },
+
+  watch: {
+
+    getSelectedSong(val){
+      this.startSong(val)
+    },
+
+    actualSong(val){
+      if(val.title !== "") {
+        this.songTitle = val.title;
+        this.songArtist = val.artiste;
+      }
     }
   },
 }

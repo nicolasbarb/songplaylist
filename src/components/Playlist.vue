@@ -1,36 +1,64 @@
 <template>
-
+    <div>
+        <input type="text" v-model="search" placeholder="Chercher un titre.."/>
         <ul>
-            <div v-for="song in this.$store.state.songs" :key="song.urlSong">
+            <div v-for="song in filteringList" :key="song.urlSong">
                 <v-btn class="btn" @click="startSong(song)">
                     {{ song.title }}
                 </v-btn>
+                <v-btn @click="addSongsInWaiting(song)">Mettre en attente</v-btn>
             </div>
         </ul>
+    </div>
 </template>
 
 <script>
 
     import json from "../assets/db.json";
-    import { bus } from '../main'
+    import { mapActions, mapGetters } from "vuex";
 
 
     export default {
         name: "playlist",
 
         created() {
-            this.fetchSongs();
+            this.loadSongs();
+            this.filteredList = this.getSongsPlaylist;
+        },
+
+        data () {
+            return {
+                search: '',
+                filteredList: []
+            }
         },
         methods: {
 
-            fetchSongs() {
-                let jsonfile = json.playlist;
-                jsonfile.map(data => this.$store.state.songs.push(data));
+            loadSongs() {
+                this.fetchSongs(json.playlist)
             },
 
-            startSong(song) {
-                bus.$emit("startsong", song);
-            }
+            ...mapActions({
+                fetchSongs: 'songs',
+                startSong: 'playThisSong',
+                addSongsInWaiting: 'addSongsInWaiting',
+            }),
+
+            /*
+            inWaiting(song) {
+                bus.$emit("inwaiting", this.$store.state.songs.indexOf(song));
+            }*/
+        },
+
+        computed: {
+            ...mapGetters(["getSongsPlaylist"]),
+
+            filteringList() {
+                return this.filteredList.filter(songs => {
+                    return songs.title.toLowerCase().includes(this.search.toLowerCase())
+                })
+            },
+
         }
     }
 </script>
