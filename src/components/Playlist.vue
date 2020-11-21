@@ -21,7 +21,9 @@
         name: "playlist",
 
         created() {
-            this.fetchSongs();
+            if(this.$store.state.songs.length === 0){
+                this.fetchSongs();
+            }
         },
 
         data () {

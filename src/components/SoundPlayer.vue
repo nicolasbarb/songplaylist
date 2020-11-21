@@ -2,6 +2,7 @@
   <div class="music">
     <v-img class="img" src="actualSong.img"></v-img>
     <v-card-text>
+      <p>{{this.songArtist}}</p><p>{{this.songTitle}}</p>
       <span>{{ currentTimeFormatted }}</span> /
       <span id="duration">{{ durationFormatted }}</span>
       <v-slider
@@ -38,7 +39,9 @@ export default {
   name: "soundPlayer",
 
   created() {
-    this.songs = this.$store.state.songs;
+    if(this.songs !== []){
+      this.songs = this.$store.state.songs;
+    }
     bus.$on('startsong', (data) => {
       this.startSong(data)
     })
@@ -51,8 +54,10 @@ export default {
       duration: 0,
       intervalTimer: null,
       actualSong: null,
+      songTitle: "",
+      songArtist: "",
       songs: [],
-      volume: .5,
+      volume: 1,
       favoriteList: [],
       favoriteSong: null,
     };
@@ -113,14 +118,13 @@ export default {
     },
     updateVolume(volume) {
       this.myAudio.volume = volume
-      if (this.myAudio.volume == 0) {
+      if (this.myAudio.volume === 0) {
         console.log("Volume off", volume);
       } else if (this.myAudio.volume < 0 || this.myAudio.volume > 1) {
         console.error("Error value volume", volume)
       } else {
         console.log(volume)
       }
-      return;
     },
     addFavoriteSong() {
       if (this.myAudio == null) {
@@ -137,7 +141,6 @@ export default {
           console.log("song added", this.favoriteList)
         }
       }
-      return;
     },
   },
   computed: {
@@ -147,6 +150,20 @@ export default {
 
     durationFormatted() {
       return moment(this.duration * 1000).format("mm:ss");
+    }
+  },
+
+  watch: {
+
+    actualSong(val){
+      if(val.title !== "") {
+        this.songTitle = val.title;
+        this.songArtist = val.artiste;
+      }
+
+      val.onended = () => {
+        this.next()
+      }
     }
   },
 }
