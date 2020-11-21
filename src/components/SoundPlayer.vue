@@ -27,16 +27,19 @@
         <v-icon>mdi-heart</v-icon>
       </v-btn>
     </v-card-text>
+    <FavoriteModal :favoriteSong="favoriteSong"/>
     <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step=".1" thumb-label></v-slider>
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import FavoriteModal from "./FavoriteModal";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "soundPlayer",
+  components: {FavoriteModal},
 
   created() {
   },
@@ -82,15 +85,12 @@ export default {
       this.intervalTimer = this.calculIntervalTime();
       this.play();
     },
-
     play() {
       this.myAudio.play();
     },
-
     pause() {
       this.myAudio.pause();
     },
-
     next() {
       const nextSongIndex = this.getSongsPlaylist.indexOf(this.actualSong) + 1;
       const nextSong = this.getSongsPlaylist[nextSongIndex];
@@ -100,7 +100,6 @@ export default {
       }
       this.startSong(nextSong);
     },
-
     back() {
       const prevSong = this.getPreviousSongs.pop();
       if (!prevSong) {
