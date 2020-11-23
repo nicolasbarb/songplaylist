@@ -6,9 +6,7 @@ import './registerServiceWorker'
 import store from "./store";
 
 
-Vue.config.productionTip = false
-export const bus = new Vue();
-
+Vue.config.productionTip = false;
 
 new Vue({
   store,
