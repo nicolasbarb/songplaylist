@@ -12,7 +12,7 @@
         </v-card-title>
         <v-card-text>
           <p>Text</p>
-          <p>{{ favoriteSong }}</p>
+          <p>{{ getFavoriteSong }}</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -29,15 +29,18 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "FavoriteModal",
-  props: [
-    'favoriteSong'
-  ],
   data() {
     return {
       dialog: false
     }
   },
+  computed: {
+    ...mapGetters(["getFavoriteSong", "getFavoriteList"]),
+  }
+
 }
 </script>

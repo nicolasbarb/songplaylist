@@ -2,7 +2,8 @@
   <div class="music">
     <v-img class="img" src="actualSong.img"></v-img>
     <v-card-text>
-      <p>{{this.songArtist}}</p><p>{{this.songTitle}}</p>
+      <p>{{ this.songArtist }}</p>
+      <p>{{ this.songTitle }}</p>
       <span>{{ currentTimeFormatted }}</span> /
       <span id="duration">{{ durationFormatted }}</span>
       <v-slider
@@ -27,7 +28,7 @@
         <v-icon>mdi-heart</v-icon>
       </v-btn>
     </v-card-text>
-    <FavoriteModal :favoriteSong="favoriteSong"/>
+    <FavoriteModal/>
     <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step=".1" thumb-label></v-slider>
   </div>
 </template>
@@ -35,7 +36,7 @@
 <script>
 import moment from "moment";
 import FavoriteModal from "./FavoriteModal";
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   name: "soundPlayer",
@@ -56,13 +57,13 @@ export default {
       inWaitingSongs: [],
       inPreviousSongs: [],
       volume: 1,
-      favoriteList: [],
-      favoriteSong: null,
     };
   },
   methods: {
     ...mapActions({
-      addSongsInPrevious: 'addSongsInPrevious'
+      addSongsInPrevious: 'addSongsInPrevious',
+      setFavoriteSong: 'setFavoriteSong',
+      filterFavoriteList: 'filterFavoriteList',
     }),
 
     startSong(song) {
@@ -70,11 +71,10 @@ export default {
         clearInterval(this.intervalTimer);
         this.pause();
       }
-/*
-      this.addSongsInPrevious(this.actualSong);
-*/
+      /*
+            this.addSongsInPrevious(this.actualSong);
+      */
       this.actualSong = song;
-      console.log("ACTUAL SONG : ", this.actualSong);
       this.myAudio = new Audio(this.actualSong.urlSong);
       this.myAudio.addEventListener("canplaythrough", () => {
         this.duration = this.myAudio.duration;
@@ -132,25 +132,20 @@ export default {
       }
     },
     addFavoriteSong() {
-      if (this.myAudio == null) {
+      if (this.actualSong == null) {
         console.error("please launch song")
       } else {
-        this.favoriteSong = this.myAudio
-        if (this.favoriteSong == null) {
+        this.setFavoriteSong(this.actualSong)
+        if (this.getFavoriteSong == null) {
           console.error("need song")
-        } else if (this.favoriteList.includes(this.favoriteSong)) {
-          this.favoriteList.splice(this.favoriteSong, 1)
-          console.log("Array splice", this.favoriteList)
         } else {
-          this.favoriteList.push(this.favoriteSong)
-          console.log("song added", this.favoriteList)
+          this.filterFavoriteList()
         }
       }
     },
   },
   computed: {
-    ...mapGetters(["getSongsPlaylist", "getSelectedSong", "getWaitingSongs", "getPreviousSongs"]),
-
+    ...mapGetters(["getSongsPlaylist", "getSelectedSong", "getWaitingSongs", "getPreviousSongs", "getFavoriteSong", "getFavoriteList"]),
 
     currentTimeFormatted() {
       return moment(this.currentTime * 1000).format("mm:ss");
@@ -163,12 +158,12 @@ export default {
 
   watch: {
 
-    getSelectedSong(val){
+    getSelectedSong(val) {
       this.startSong(val)
     },
 
-    actualSong(val){
-      if(val.title !== "") {
+    actualSong(val) {
+      if (val.title !== "") {
         this.songTitle = val.title;
         this.songArtist = val.artiste;
       }
