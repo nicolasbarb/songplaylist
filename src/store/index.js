@@ -25,15 +25,36 @@ export default new Vuex.Store({
         },
 
         addSongsInPrevious(state, song){
+            if(state.previousSongs.includes(song))
+            {
+                console.log("try");
+                return;
+            }
           state.previousSongs.push(song)
         },
 
-        addSongsInWaiting(state, songs){
-            state.inWaitingSongs = songs
+        addSongsInWaiting(state, song){
+            state.inWaitingSongs.push(song)
         },
 
         playThisSong(state, songChosen){
             state.seletedSong = songChosen
+        },
+
+        spliceInWaitingSong(state, song){
+            let exist = state.inWaitingSongs.includes(song);
+
+            if(exist === true) {
+                console.log("Trop efficace");
+                let indexOfSong = state.inWaitingSongs.indexOf(song);
+                state.inWaitingSongs.splice(indexOfSong, 1)
+            } else {
+                console.log("Ma foi");
+            }
+        },
+
+        popPreviousSong(state, previousSongs){
+            state.previousSongs = previousSongs
         }
     },
     actions: {
@@ -42,8 +63,8 @@ export default new Vuex.Store({
             commit('songs', songs)
         },
 
-        addSongsInWaiting({commit}, songs){
-          commit('addSongsInWaiting', songs)
+        addSongsInWaiting({commit}, song){
+          commit('addSongsInWaiting', song)
         },
 
         addSongsInPrevious({commit}, song){
@@ -53,5 +74,17 @@ export default new Vuex.Store({
         playThisSong({commit}, songChosen){
             commit('playThisSong', songChosen)
         },
+
+        spliceInWaitingSong({commit}, song){
+            commit('spliceInWaitingSong', song)
+        },
+
+        popPreviousSong({commit}){
+
+            let previousSongs = Array.from(this.state.previousSongs);
+            let popedSong = previousSongs.pop();
+            commit('popPreviousSong', previousSongs);
+            return popedSong
+        }
     }
 });

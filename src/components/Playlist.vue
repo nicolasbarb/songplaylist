@@ -43,11 +43,6 @@
                 startSong: 'playThisSong',
                 addSongsInWaiting: 'addSongsInWaiting',
             }),
-
-            /*
-            inWaiting(song) {
-                bus.$emit("inwaiting", this.$store.state.songs.indexOf(song));
-            }*/
         },
 
         computed: {
