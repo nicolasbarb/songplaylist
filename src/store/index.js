@@ -25,11 +25,11 @@ export default new Vuex.Store({
         },
 
         addSongsInPrevious(state, song){
-            if(state.previousSongs.includes(song))
+/*            if(state.previousSongs.includes(song))
             {
                 console.log("try");
                 return;
-            }
+            }*/
           state.previousSongs.push(song)
         },
 

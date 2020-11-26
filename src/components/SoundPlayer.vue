@@ -116,6 +116,17 @@
                     }
                     this.startSong(nextSong);
 
+                } else {
+                    if (this.getWaitingSongs.length > 0) {
+                        nextSong = this.getWaitingSongs[0];
+                        this.spliceInWaitingSong(nextSong)
+
+                        if (!nextSong) {
+                            return;
+                        }
+                        this.startSong(nextSong);
+                    }
+
                 }
             },
 
