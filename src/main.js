@@ -6,13 +6,11 @@ import './registerServiceWorker'
 import store from "./store";
 
 
-Vue.config.productionTip = false
-export const bus = new Vue();
-
+Vue.config.productionTip = false;
 
 new Vue({
-  store,
-  vuetify,
-  router,
-  render: h => h(App)
+    store,
+    vuetify,
+    router,
+    render: h => h(App)
 }).$mount('#app')
