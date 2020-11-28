@@ -2,7 +2,7 @@
   <div class="music">
     <v-img class="img" src="actualSong.img"></v-img>
     <v-card-text>
-      <p>{{ this.songArtist }}</p>
+      <p @click="redirectToArtistePage">{{ this.songArtist }}</p>
       <p>{{ this.songTitle }}</p>
       <span>{{ currentTimeFormatted }}</span> /
       <span id="duration">{{ durationFormatted }}</span>
@@ -37,13 +37,11 @@
 import moment from "moment";
 import FavoriteModal from "./FavoriteModal";
 import {mapGetters, mapActions} from "vuex";
+import router from "../router/index";
 
 export default {
   name: "soundPlayer",
   components: {FavoriteModal},
-
-  created() {
-  },
 
   data() {
     return {
@@ -143,7 +141,16 @@ export default {
         }
       }
     },
+    redirectToArtistePage() {
+      router.push({
+        name: 'Artiste',
+        params: {
+          artisteName: this.songArtist,
+        }
+      })
+    }
   },
+
   computed: {
     ...mapGetters(["getSongsPlaylist", "getSelectedSong", "getWaitingSongs", "getPreviousSongs", "getFavoriteSong", "getFavoriteList"]),
 

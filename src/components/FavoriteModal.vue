@@ -11,8 +11,10 @@
           Favorite Song
         </v-card-title>
         <v-card-text>
-          <p>Text</p>
-          <p>{{ getFavoriteSong }}</p>
+          <ul class="listModal" v-if="getFavoriteSong != null">
+            <li v-for:="getFavoriteSong in getFavoriteList">{{ getFavoriteSong.artiste }} - {{ getFavoriteSong.title }}>
+            </li>
+          </ul>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -41,6 +43,17 @@ export default {
   computed: {
     ...mapGetters(["getFavoriteSong", "getFavoriteList"]),
   }
-
 }
 </script>
+
+<style scoped lang="scss">
+
+.listModal {
+  li {
+    padding-bottom: 5px;
+    list-style: none;
+    border-bottom: 1px solid black;
+  }
+}
+
+</style>

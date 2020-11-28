@@ -8,6 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         songs: [],
+        artistes: [],
         inWaitingSongs: [],
         previousSongs: [],
         selectedSong: null,
@@ -16,16 +17,20 @@ export default new Vuex.Store({
     },
     getters: {
         getSongsPlaylist: state => state.songs,
+        getArtisteSongs: state => state.artistes,
         getSelectedSong: state => state.selectedSong,
         getWaitingSongs: state => state.inWaitingSongs,
         getPreviousSongs: state => state.previousSongs,
         getFavoriteList: state => state.favoriteList,
-        getFavoriteSong: state => state.favoriteSong
+        getFavoriteSong: state => state.favoriteSong,
     },
     mutations: {
 
         songs(state, songs) {
             state.songs = songs
+        },
+        artisteSong(state, artiste) {
+            state.artistes = artiste
         },
         addSongsInPrevious(state, song) {
             state.previousSongs.push(song)
@@ -56,6 +61,9 @@ export default new Vuex.Store({
         songs({commit}, songs) {
             commit('songs', songs)
         },
+        artisteSong({commit}, artiste) {
+            commit('artisteSong', artiste)
+        },
         addSongsInWaiting({commit}, songs) {
             commit('addSongsInWaiting', songs)
         },
@@ -71,6 +79,5 @@ export default new Vuex.Store({
         filterFavoriteList({commit}, favoriteList) {
             commit('filterFavoriteList', favoriteList)
         },
-
     }
 });
