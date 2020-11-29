@@ -8,7 +8,6 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         songs: [],
-        artistes: [],
         inWaitingSongs: [],
         previousSongs: [],
         selectedSong: null,
@@ -18,7 +17,6 @@ export default new Vuex.Store({
 
     getters: {
         getSongsPlaylist: state => state.songs,
-        getArtisteSongs: state => state.artistes,
         getSelectedSong: state => state.selectedSong,
         getWaitingSongs: state => state.inWaitingSongs,
         getPreviousSongs: state => state.previousSongs,
@@ -29,9 +27,6 @@ export default new Vuex.Store({
     mutations: {
         songs(state, songs) {
             state.songs = songs
-        },
-        artisteSong(state, artiste) {
-            state.artistes = artiste
         },
         addSongsInPrevious(state, song) {
             state.previousSongs.push(song)
@@ -44,11 +39,8 @@ export default new Vuex.Store({
             let exist = state.inWaitingSongs.includes(song);
 
             if (exist === true) {
-                console.log("Trop efficace");
                 let indexOfSong = state.inWaitingSongs.indexOf(song);
                 state.inWaitingSongs.splice(indexOfSong, 1)
-            } else {
-                console.log("Ma foi");
             }
         },
         popPreviousSong(state, previousSongs) {
@@ -61,13 +53,13 @@ export default new Vuex.Store({
             state.favoriteSong = favoriteSong
         },
         filterFavoriteList(state) {
-            let exists = state.favoriteList.includes(state.favoriteSong)
+            let exists = state.favoriteList.includes(state.favoriteSong);
             if (exists === true) {
-                let filter = state.favoriteList.indexOf(state.selectedSong)
-                state.favoriteList.splice(filter, 1)
+                let filter = state.favoriteList.indexOf(state.selectedSong);
+                state.favoriteList.splice(filter, 1);
                 console.log("deleted")
             } else {
-                state.favoriteList.push(state.favoriteSong)
+                state.favoriteList.push(state.favoriteSong);
                 console.log("added")
             }
         }
@@ -76,9 +68,6 @@ export default new Vuex.Store({
     actions: {
         songs({commit}, songs) {
             commit('songs', songs)
-        },
-        artisteSong({commit}, artiste) {
-            commit('artisteSong', artiste)
         },
         addSongsInWaiting({commit}, song) {
             commit('addSongsInWaiting', song)

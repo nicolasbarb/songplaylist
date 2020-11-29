@@ -3,7 +3,7 @@
     {
       "title": "Thunderstruck",
       "urlSong": "./musique/acdc_thunderstruck.mp3",
-      "img": "./songsImages/thunderstruck.jpg",
+      "img": "../../songsImages/thunderstruck.jpg",
       "artiste": "ACDC"
     },
     {
@@ -29,46 +29,6 @@
       "urlSong": "./musique/joyca_confines.mp3",
       "img": "./songsImages/confine.jpg",
       "artiste": "Joyca"
-    }
-  ],
-  "artiste": [
-    {
-      "name": "ACDC",
-      "songs": [
-        "./musique/acdc_thunderstruck.mp3"
-      ],
-      "songsName": [
-        "Thunderstruck"
-      ]
-    },
-    {
-      "name": "Everybody Loves an Outlaw",
-      "songs": [
-        "./musique/ELAO_i_see_red.mp3"
-      ],
-      "songsName": [
-        "I See Red"
-      ]
-    },
-    {
-      "name": "Yuzmv",
-      "songs": [
-        "./musique/yuzmv_chemin.mp3"
-      ],
-      "songsName": [
-        "Le Chemin"
-      ]
-    },
-    {
-      "name": "Joyca",
-      "songs": [
-        "./musique/joyca_wow.mp3",
-        "./musique/joyca_confines.mp3"
-      ],
-      "songsName": [
-        "Wow Wow Wow",
-        "Confinés"
-      ]
     }
   ]
 }

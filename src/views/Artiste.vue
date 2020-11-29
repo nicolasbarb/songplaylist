@@ -2,57 +2,42 @@
   <div id="container">
     <h1>Nom de l'artiste</h1>
     <p>{{ this.artisteName }}</p>
-    <v-btn @click="showArtisteSong">{{ this.songTitle }}</v-btn>
+    <ul>
+      <li v-for="song in artisteSongs" :key="song.title">
+        <v-img :src="song.img"></v-img>
+        {{song.title}}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import json from "../assets/db.json";
-import {mapActions, mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   name: 'Artiste',
 
   data() {
     return {
-      songTitle: null,
       artisteName: null,
-      artisteSong: []
+      artisteSongs: []
     }
   },
 
   created() {
-    this.loadArtisteSongs()
-    this.artisteName = this.$route.params.artisteName
-    this.artisteSong = this.getArtisteSongs;
-    this.showArtisteSong()
+    this.artisteName = this.$route.params.artisteName;
+    this.loadArtisteSong()
   },
 
   methods: {
-    ...mapActions({
-      fetchArtiste: 'artisteSong',
-    }),
 
-    loadArtisteSongs() {
-      this.fetchArtiste(json.artiste)
-    },
-
-    showArtisteSong: function () {
-      // this.songTitle = this.artisteSong.name
-      this.artisteSong.map(index => {
-        this.songTitle = this.artisteSong[index.name]
-      })
-      console.log("pute", this.songTitle)
-
-
-      /*if (this.artisteName === this.artisteSong.name){
-        return;
-      }*/
+    loadArtisteSong() {
+      this.artisteSongs = this.getSongsPlaylist.filter(songTitle => songTitle.artiste === this.artisteName);
     }
   },
 
   computed: {
-    ...mapGetters(["getArtisteSongs"]),
+    ...mapGetters(["getSongsPlaylist"]),
   }
 }
 </script>

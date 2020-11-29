@@ -1,6 +1,6 @@
 <template>
   <div class="music">
-    <v-img class="img" src="actualSong.img"></v-img>
+    <v-img class="img" v-if="actualSong !== null"  :src="actualSong.img"></v-img>
     <v-card-text>
       <p @click="redirectToArtistePage">{{ this.songArtist }}</p>
       <p>{{ this.songTitle }}</p>
@@ -107,7 +107,7 @@ export default {
       } else {
         if (this.getWaitingSongs.length > 0) {
           nextSong = this.getWaitingSongs[0];
-          this.spliceInWaitingSong(nextSong)
+          this.spliceInWaitingSong(nextSong);
           if (!nextSong) {
             return;
           }
