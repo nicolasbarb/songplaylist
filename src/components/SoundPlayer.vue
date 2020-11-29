@@ -62,6 +62,8 @@ export default {
       addSongsInPrevious: 'addSongsInPrevious',
       setFavoriteSong: 'setFavoriteSong',
       filterFavoriteList: 'filterFavoriteList',
+      popPreviousSong: 'popPreviousSong',
+      spliceInWaitingSong: 'spliceInWaitingSong'
     }),
 
     startSong(song) {
@@ -69,9 +71,7 @@ export default {
         clearInterval(this.intervalTimer);
         this.pause();
       }
-      /*
-            this.addSongsInPrevious(this.actualSong);
-      */
+
       this.actualSong = song;
       this.myAudio = new Audio(this.actualSong.urlSong);
       this.myAudio.addEventListener("canplaythrough", () => {
@@ -90,20 +90,37 @@ export default {
       this.myAudio.pause();
     },
     next() {
-      const nextSongIndex = this.getSongsPlaylist.indexOf(this.actualSong) + 1;
-      const nextSong = this.getSongsPlaylist[nextSongIndex];
-
-      if (!nextSong) {
-        return;
+      let nextSong;
+      if (this.actualSong !== this.getSongsPlaylist[this.getSongsPlaylist.length - 1]) {
+        this.addSongsInPrevious(this.actualSong);
+        if (this.getWaitingSongs.length > 0) {
+          nextSong = this.getWaitingSongs[0];
+          this.spliceInWaitingSong(nextSong)
+        } else {
+          const nextSongIndex = this.getSongsPlaylist.indexOf(this.actualSong) + 1;
+          nextSong = this.getSongsPlaylist[nextSongIndex];
+        }
+        if (!nextSong) {
+          return;
+        }
+        this.startSong(nextSong);
+      } else {
+        if (this.getWaitingSongs.length > 0) {
+          nextSong = this.getWaitingSongs[0];
+          this.spliceInWaitingSong(nextSong)
+          if (!nextSong) {
+            return;
+          }
+          this.startSong(nextSong);
+        }
       }
-      this.startSong(nextSong);
     },
     back() {
-      const prevSong = this.getPreviousSongs.pop();
-      if (!prevSong) {
-        return;
-      }
-      this.startSong(prevSong);
+      this.popPreviousSong().then(response => {
+        if (response) {
+          this.startSong(response)
+        }
+      })
     },
 
     changeTime(e) {
