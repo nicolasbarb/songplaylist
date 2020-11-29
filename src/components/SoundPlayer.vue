@@ -150,7 +150,7 @@ export default {
       if (this.actualSong == null) {
         console.error("please launch song")
       } else {
-        this.setFavoriteSong(this.actualSong)
+        this.setFavoriteSong(this.actualSong);
         if (this.getFavoriteSong == null) {
           console.error("need song")
         } else {
