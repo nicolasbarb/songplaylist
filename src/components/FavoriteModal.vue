@@ -11,8 +11,10 @@
           Favorite Song
         </v-card-title>
         <v-card-text>
-          <p>Text</p>
-          <p>{{ favoriteSong }}</p>
+          <ul class="listModal" v-if="getFavoriteSong != null">
+            <li v-for:="getFavoriteSong in getFavoriteList">{{ getFavoriteSong.artiste }} - {{ getFavoriteSong.title }}>
+            </li>
+          </ul>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -29,15 +31,29 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "FavoriteModal",
-  props: [
-    'favoriteSong'
-  ],
   data() {
     return {
       dialog: false
     }
   },
+  computed: {
+    ...mapGetters(["getFavoriteSong", "getFavoriteList"]),
+  }
 }
 </script>
+
+<style scoped lang="scss">
+
+.listModal {
+  li {
+    padding-bottom: 5px;
+    list-style: none;
+    border-bottom: 1px solid black;
+  }
+}
+
+</style>
