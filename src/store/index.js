@@ -8,43 +8,42 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         songs: [],
+        artistes: [],
         inWaitingSongs: [],
         previousSongs: [],
-        seletedSong: null,
+        selectedSong: null,
+        favoriteList: [],
+        favoriteSong: null,
     },
+
     getters: {
         getSongsPlaylist: state => state.songs,
-        getSelectedSong: state => state.seletedSong,
+        getArtisteSongs: state => state.artistes,
+        getSelectedSong: state => state.selectedSong,
         getWaitingSongs: state => state.inWaitingSongs,
-        getPreviousSongs: state => state.previousSongs
+        getPreviousSongs: state => state.previousSongs,
+        getFavoriteList: state => state.favoriteList,
+        getFavoriteSong: state => state.favoriteSong,
     },
+
     mutations: {
-
-        songs(state, songs){
-          state.songs = songs
+        songs(state, songs) {
+            state.songs = songs
+        },
+        artisteSong(state, artiste) {
+            state.artistes = artiste
+        },
+        addSongsInPrevious(state, song) {
+            state.previousSongs.push(song)
         },
 
-        addSongsInPrevious(state, song){
-/*            if(state.previousSongs.includes(song))
-            {
-                console.log("try");
-                return;
-            }*/
-          state.previousSongs.push(song)
-        },
-
-        addSongsInWaiting(state, song){
+        addSongsInWaiting(state, song) {
             state.inWaitingSongs.push(song)
         },
-
-        playThisSong(state, songChosen){
-            state.seletedSong = songChosen
-        },
-
-        spliceInWaitingSong(state, song){
+        spliceInWaitingSong(state, song) {
             let exist = state.inWaitingSongs.includes(song);
 
-            if(exist === true) {
+            if (exist === true) {
                 console.log("Trop efficace");
                 let indexOfSong = state.inWaitingSongs.indexOf(song);
                 state.inWaitingSongs.splice(indexOfSong, 1)
@@ -52,39 +51,59 @@ export default new Vuex.Store({
                 console.log("Ma foi");
             }
         },
-
-        popPreviousSong(state, previousSongs){
+        popPreviousSong(state, previousSongs) {
             state.previousSongs = previousSongs
+        },
+        playThisSong(state, songChosen) {
+            state.selectedSong = songChosen
+        },
+        setFavoriteSong(state, favoriteSong) {
+            state.favoriteSong = favoriteSong
+        },
+        filterFavoriteList(state) {
+            let exists = state.favoriteList.includes(state.favoriteSong)
+            if (exists === true) {
+                let filter = state.favoriteList.indexOf(state.selectedSong)
+                state.favoriteList.splice(filter, 1)
+                console.log("deleted")
+            } else {
+                state.favoriteList.push(state.favoriteSong)
+                console.log("added")
+            }
         }
     },
-    actions: {
 
-        songs({commit}, songs){
+    actions: {
+        songs({commit}, songs) {
             commit('songs', songs)
         },
-
-        addSongsInWaiting({commit}, song){
-          commit('addSongsInWaiting', song)
+        artisteSong({commit}, artiste) {
+            commit('artisteSong', artiste)
         },
-
-        addSongsInPrevious({commit}, song){
+        addSongsInWaiting({commit}, song) {
+            commit('addSongsInWaiting', song)
+        },
+        addSongsInPrevious({commit}, song) {
             commit('addSongsInPrevious', song)
         },
-
-        playThisSong({commit}, songChosen){
+        playThisSong({commit}, songChosen) {
             commit('playThisSong', songChosen)
         },
-
-        spliceInWaitingSong({commit}, song){
+        spliceInWaitingSong({commit}, song) {
             commit('spliceInWaitingSong', song)
         },
-
-        popPreviousSong({commit}){
+        popPreviousSong({commit}) {
 
             let previousSongs = Array.from(this.state.previousSongs);
             let popedSong = previousSongs.pop();
             commit('popPreviousSong', previousSongs);
             return popedSong
-        }
+        },
+        setFavoriteSong({commit}, favoriteSong) {
+            commit('setFavoriteSong', favoriteSong)
+        },
+        filterFavoriteList({commit}, favoriteList) {
+            commit('filterFavoriteList', favoriteList)
+        },
     }
 });
