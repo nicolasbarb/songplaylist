@@ -165,6 +165,7 @@ export default {
           artisteName: this.songArtist,
         }
       })
+      this.pause()
     }
   },
 
