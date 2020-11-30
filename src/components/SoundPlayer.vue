@@ -12,21 +12,24 @@
           :value="currentTime ? currentTime : 0"
           @input="changeTime($event)"
       />
-      <v-btn @click="back" elevation="2" fab>
-        <v-icon>mdi-skip-previous</v-icon>
-      </v-btn>
-      <v-btn @click="play" elevation="2" fab>
-        <v-icon>mdi-play</v-icon>
-      </v-btn>
-      <v-btn @click="pause" elevation="2" fab>
-        <v-icon>mdi-pause</v-icon>
-      </v-btn>
-      <v-btn @click="next" elevation="2" fab>
-        <v-icon>mdi-skip-next</v-icon>
-      </v-btn>
-      <v-btn @click="addFavoriteSong" elevation="2" fab>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
+      <div class="audioButton">
+        <v-btn @click="back" elevation="2" fab>
+          <v-icon>mdi-skip-previous</v-icon>
+        </v-btn>
+        <v-btn @click="play" elevation="2" fab>
+          <v-icon>mdi-play</v-icon>
+        </v-btn>
+        <v-btn @click="pause" elevation="2" fab>
+          <v-icon>mdi-pause</v-icon>
+        </v-btn>
+        <v-btn @click="next" elevation="2" fab>
+          <v-icon>mdi-skip-next</v-icon>
+        </v-btn>
+        <v-btn @click="addFavoriteSong" elevation="2" fab>
+          <v-icon>mdi-heart</v-icon>
+        </v-btn>
+      </div>
+
     </v-card-text>
     <FavoriteModal/>
     <v-slider :value="volume" @input="updateVolume($event)" max="1" :min="0" step=".1" thumb-label></v-slider>
@@ -137,7 +140,7 @@ export default {
       }, 1000);
     },
     updateVolume(volume) {
-      this.myAudio.volume = volume
+      this.myAudio.volume = volume;
       if (this.myAudio.volume === 0) {
         console.log("Volume off", volume);
       } else if (this.myAudio.volume < 0 || this.myAudio.volume > 1) {
@@ -164,8 +167,7 @@ export default {
         params: {
           artisteName: this.songArtist,
         }
-      })
-      this.pause()
+      });
     }
   },
 
@@ -196,3 +198,25 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="scss">
+
+  .music {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 400px;
+
+
+    .audioButton {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .img {
+      height: 200px;
+
+    }
+  }
+
+</style>

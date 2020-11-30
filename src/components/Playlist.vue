@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="playlist">
     <input type="text" v-model="search" placeholder="Chercher un titre.."/>
     <ul>
       <div v-for="song in filteringList" :key="song.urlSong">
@@ -64,5 +64,9 @@ export default {
 </script>
 
 <style scoped>
+
+  .playlist {
+    height: 300px;
+  }
 
 </style>
